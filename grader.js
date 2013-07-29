@@ -69,11 +69,15 @@ if(require.main == module) {
     .option('-u, --url <url>', 'Url')
 	.parse(process.argv);
     if(program.url){
-	file = "file.html";
+	var file = "file.html";
 	rest.get(program.url).on('complete', function(result){
-	fs.writeFileSync(file,result);
+    if(result instanceof Error){
+	console.log('Error getting file');
+}else{
+    fs.writeFileSync("file.html",result);
+}
 	});
-	var checkJson = checkHtmlFile(file, program.checks);
+    var checkJson = checkHtmlFile(file, program.checks);
     }else{
 	var checkJson = checkHtmlFile(program.file, program.checks);
     }
